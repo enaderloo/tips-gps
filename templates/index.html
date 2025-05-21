@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <title>نمایش رشته‌های لحظه‌ای</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        direction: rtl;
+        padding: 20px;
+      }
+      #string-list {
+        border: 1px solid #ccc;
+        padding: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .string-item {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>رشته‌های دریافتی</h1>
+    <div id="string-list"></div>
+
+    <script>
+      // به‌روزرسانی لیست رشته‌ها هر 2 ثانیه
+      function updateStrings() {
+        fetch("/get_strings")
+          .then((response) => response.json())
+          .then((data) => {
+            const stringList = document.getElementById("string-list");
+            stringList.innerHTML = ""; // پاک کردن لیست قبلی
+            data.forEach((str) => {
+              const p = document.createElement("p");
+              p.className = "string-item";
+              p.textContent = str;
+              stringList.appendChild(p);
+            });
+          })
+          .catch((error) => console.error("خطا در دریافت داده‌ها:", error));
+      }
+
+      // به‌روزرسانی اولیه و سپس هر 2 ثانیه
+      updateStrings();
+      setInterval(updateStrings, 2000);
+    </script>
+  </body>
+</html>
